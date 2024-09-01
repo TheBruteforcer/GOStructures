@@ -69,10 +69,8 @@ func SearchStudent(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// Decode the JSON body into a map
-	var data map[string]interface{}
-	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
-		http.Error(w, "Error decoding JSON payload", http.StatusBadRequest)
-		return
+	data := map[string]interface{}{
+		"id": r.URL.Query().Get("id"),
 	}
 
 	// Open the database
