@@ -32,9 +32,9 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 	// Convert map values to the expected types and create the Student
 	student := structs.Student{
 		Name:           data["name"].(string),
-		Code:           int(data["code"].(int)),
-		AttendanceRate: int(data["ar"].(int)),
-		Rank:           int(data["rank"].(int)),
+		Code:           int(data["code"].(float64)),
+		AttendanceRate: int(data["ar"].(float64)),
+		Rank:           int(data["rank"].(float64)),
 		Messages:       []structs.Messages{},
 		Degrees:        []structs.Degrees{},
 	}
