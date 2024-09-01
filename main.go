@@ -21,6 +21,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/add_student", stdactions.AddStudent).Methods("POST")
 	r.HandleFunc("/search_student", stdactions.SearchStudent).Methods("GET")
+	r.HandleFunc("/messages", stdactions.GetMessages).Methods("GET")
 	r.HandleFunc("/new_message", stdactions.AddMessage).Methods("POST")
 	r.HandleFunc("/new_post", stdactions.Post).Methods("POST")
 	r.HandleFunc("/all_posts", stdactions.Posts).Methods("GET")

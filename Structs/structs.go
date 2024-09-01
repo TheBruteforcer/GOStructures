@@ -4,6 +4,7 @@ type Student struct {
 	ID             int `gorm:"primaryKey;autoIncrement"`
 	Name           string
 	Code           int
+	Rank           int
 	AttendanceRate int
 	Messages       []Messages
 	Degrees        []Degrees

@@ -32,8 +32,9 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 	// Convert map values to the expected types and create the Student
 	student := structs.Student{
 		Name:           data["name"].(string),
-		Code:           int(data["code"].(float64)),
-		AttendanceRate: int(data["ar"].(float64)),
+		Code:           int(data["code"].(int)),
+		AttendanceRate: int(data["ar"].(int)),
+		Rank:           int(data["rank"].(int)),
 		Messages:       []structs.Messages{},
 		Degrees:        []structs.Degrees{},
 	}
@@ -210,4 +211,36 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		http.Error(w, "Error encoding response", http.StatusInternalServerError)
 	}
+}
+
+func GetMessages(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	w.Header().Set("Content-Type", "application/json")
+
+	// Decode the JSON body into a map
+	data := map[string]interface{}{
+		"id": r.URL.Query().Get("id"),
+	}
+	db, err := gorm.Open(sqlite.Open("Data.db"), &gorm.Config{})
+	if err != nil {
+		return
+	}
+	var student structs.Student
+	if err := db.Preload("Messages").Preload("Degrees").First(&student, data["id"]).Error; err != nil {
+		http.Error(w, "Student not found", http.StatusNotFound)
+		return
+	}
+
+	// Process Messages
+	messages := []interface{}{}
+	for _, message := range student.Messages {
+		messages = append(messages, map[string]interface{}{
+			"id":      message.ID,
+			"content": message.Content,
+		})
+	}
+	if err := json.NewEncoder(w).Encode(messages); err != nil {
+		http.Error(w, "Error encoding JSON response", http.StatusInternalServerError)
+	}
+
 }
