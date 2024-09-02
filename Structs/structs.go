@@ -13,8 +13,8 @@ type Student struct {
 type Messages struct {
 	ID        int `gorm:"primaryKey"`
 	Content   string
-	StudentID int, // Foreign key to Student
-	Type string, // thank , dep
+	StudentID int // Foreign key to Student
+	Type string // thank , dep
 	
 }
 
