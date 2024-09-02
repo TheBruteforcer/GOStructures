@@ -41,7 +41,7 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 
 	var existingStudent structs.Student
 	if err := db.Where("id = ?", int(data["id"].(float64))).First(&existingStudent).Error; err == nil {
-		db.Model(&existingStudent).Updates(map[string]interface{}{"attendancae_rate": int(data["ar"].(float64)), "rank": int(data["rank"].(float64))})
+		db.Model(&existingStudent).Updates(map[string]interface{}{"attendance_rate": int(data["ar"].(float64)), "rank": int(data["rank"].(float64))})
 		return
 	}
 	db.Create(&student)
