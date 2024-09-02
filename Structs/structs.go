@@ -1,7 +1,7 @@
 package structs
 
 type Student struct {
-	ID             int
+	ID             int `gorm:"primaryKey;autoIncrement"`
 	Name           string
 	Code           int
 	Rank           int
