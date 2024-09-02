@@ -33,6 +33,7 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 	student := structs.Student{
 		Name:           data["name"].(string),
 		Code:           int(data["code"].(float64)),
+		ID:             int(data["id"].(float64)),
 		AttendanceRate: int(data["ar"].(float64)),
 		Rank:           int(data["rank"].(float64)),
 		Messages:       []structs.Messages{},
@@ -41,8 +42,7 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 
 	var existingStudent structs.Student
 	if err := db.Where("id = ?", student.ID).First(&existingStudent).Error; err == nil {
-		db.First(&structs.Student{}, int(data["id"].(float64))).Update("attendance_rate", int(data["ar"].(float64)))
-		db.First(&structs.Student{}, int(data["id"].(float64))).Update("rank", int(data["rank"].(float64)))
+		db.Model(&existingStudent).Updates(map[string]interface{}{"attendancae_rate": int(data["ar"].(float64)), "rank": int(data["rank"].(float64))})
 		return
 	}
 	db.Create(&student)
