@@ -42,10 +42,7 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 	var existingStudent structs.Student
 	if err := db.Where("id = ?", student.ID).First(&existingStudent).Error; err == nil {
 		var student structs.Student
-		db.First(&student, int(data["id"].(float64)))
-		student.AttendanceRate = int(data["ar"].(float64))
-		student.Rank = int(data["rank"].(float64))
-		db.Save(&student)
+		db.Model(&student).Updates(map[string]interface{}{"attendance_rate": int(data["ar"].(float64)), "rank": int(data["rank"].(float64))})
 		response := map[string]interface{}{
 			"status": "edited",
 		}
