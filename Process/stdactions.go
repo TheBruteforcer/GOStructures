@@ -30,7 +30,6 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Convert map values to the expected types and create the Student
-	db.Exec("DELETE FROM students where id = %v", data["id"].(int))
 	student := structs.Student{
 		Name:           data["name"].(string),
 		Code:           int(data["code"].(float64)),
@@ -42,8 +41,13 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 
 	var existingStudent structs.Student
 	if err := db.Where("id = ?", student.ID).First(&existingStudent).Error; err == nil {
+		var student structs.Student
+		db.First(&student, int(data["id"].(float64)))
+		student.AttendanceRate = int(data["ar"].(float64))
+		student.Rank = int(data["rank"].(float64))
+		db.Save(&student)
 		response := map[string]interface{}{
-			"status": "false",
+			"status": "edited",
 		}
 		if err := json.NewEncoder(w).Encode(response); err != nil {
 			http.Error(w, "Error encoding JSON", http.StatusInternalServerError)
