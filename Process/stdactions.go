@@ -137,7 +137,7 @@ func AddMessage(w http.ResponseWriter, r *http.Request) {
 	newMessage := structs.Messages{
 		StudentID: int(studentID), // Convert float64 to int
 		Content:   content,
-		Type : data["type"],
+		Type : data["type"].(string),
 	}
 
 	// Open database connection
