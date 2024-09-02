@@ -32,9 +32,9 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 	// Convert map values to the expected types and create the Student
 	student := structs.Student{
 		Name:           data["name"].(string),
-		Code:           int(data["code"].(float64)),
-		AttendanceRate: int(data["ar"].(float64)),
-		Rank:           int(data["rank"].(float64)),
+		Code:           int(data["code"].(int)),
+		AttendanceRate: int(data["ar"].(int)),
+		Rank:           int(data["rank"].(int)),
 		Messages:       []structs.Messages{},
 		Degrees:        []structs.Degrees{},
 	}
@@ -42,11 +42,10 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 	var existingStudent structs.Student
 	if err := db.Where("id = ?", student.ID).First(&existingStudent).Error; err == nil {
 		response := map[string]interface{}{
-			"status": "done",
+			"status": "false",
 		}
 		if err := json.NewEncoder(w).Encode(response); err != nil {
-			var student structs.Student
-			db.First(&student, int(data["if"].(float64))).Updates(map[string]interface{}{"attendance_rate": int(data["ar"].(float64)), "rank": int(data["rank"].(float64))})
+			http.Error(w, "Error encoding JSON", http.StatusInternalServerError)
 			return
 		}
 	}
@@ -104,7 +103,6 @@ func SearchStudent(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"std-id":   student.ID,
 		"std-ar":   student.AttendanceRate,
-		"std-rank": student.Rank,
 		"std-name": student.Name,
 		"messages": messages,
 		"degrees":  degrees,
@@ -138,7 +136,6 @@ func AddMessage(w http.ResponseWriter, r *http.Request) {
 	newMessage := structs.Messages{
 		StudentID: int(studentID), // Convert float64 to int
 		Content:   content,
-		Type:      data["type"].(string),
 	}
 
 	// Open database connection
@@ -240,7 +237,6 @@ func GetMessages(w http.ResponseWriter, r *http.Request) {
 		messages = append(messages, map[string]interface{}{
 			"id":      message.ID,
 			"content": message.Content,
-			"type":    message.Type,
 		})
 	}
 	if err := json.NewEncoder(w).Encode(messages); err != nil {
