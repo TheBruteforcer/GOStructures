@@ -30,7 +30,7 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Convert map values to the expected types and create the Student
-	db.Delete(&structs.Student{}, int(data["code"].(float64)))
+	db.Exec("DELETE FROM students where id = %v", data["id"].(int))
 	student := structs.Student{
 		Name:           data["name"].(string),
 		Code:           int(data["code"].(float64)),
