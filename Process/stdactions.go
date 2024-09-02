@@ -46,7 +46,8 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 		}
 		if err := json.NewEncoder(w).Encode(response); err != nil {
 			var student structs.Student
-			db.Model(&student).Updates(map[string]interface{}{"attendance_rate": int(data["ar"].(float64)), "rank": int(data["rank"].(float64))})
+			db.First(&student, int(data["if"].(float64))).Updates(map[string]interface{}{"attendance_rate": int(data["ar"].(float64)), "rank": int(data["rank"].(float64))})
+			return
 		}
 	}
 	db.Create(&student)
