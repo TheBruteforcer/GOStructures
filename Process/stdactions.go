@@ -103,6 +103,7 @@ func SearchStudent(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"std-id":   student.ID,
 		"std-ar":   student.AttendanceRate,
+		"std-rank":   student.Rank,
 		"std-name": student.Name,
 		"messages": messages,
 		"degrees":  degrees,
