@@ -1,7 +1,7 @@
 package structs
 
 type Student struct {
-	ID             int `gorm:"primaryKey;autoIncrement"`
+	ID             int
 	Name           string
 	Code           int
 	Rank           int
@@ -13,9 +13,9 @@ type Student struct {
 type Messages struct {
 	ID        int `gorm:"primaryKey"`
 	Content   string
-	StudentID int // Foreign key to Student
-	Type string // thank , dep
-	
+	StudentID int    // Foreign key to Student
+	Type      string // thank , dep
+
 }
 
 type Degrees struct {
