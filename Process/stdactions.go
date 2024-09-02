@@ -137,6 +137,7 @@ func AddMessage(w http.ResponseWriter, r *http.Request) {
 	newMessage := structs.Messages{
 		StudentID: int(studentID), // Convert float64 to int
 		Content:   content,
+		Type : data["type"],
 	}
 
 	// Open database connection
@@ -238,6 +239,7 @@ func GetMessages(w http.ResponseWriter, r *http.Request) {
 		messages = append(messages, map[string]interface{}{
 			"id":      message.ID,
 			"content": message.Content,
+			"type": message.Type,
 		})
 	}
 	if err := json.NewEncoder(w).Encode(messages); err != nil {
