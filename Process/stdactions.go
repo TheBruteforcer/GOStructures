@@ -41,14 +41,12 @@ func AddStudent(w http.ResponseWriter, r *http.Request) {
 
 	var existingStudent structs.Student
 	if err := db.Where("id = ?", student.ID).First(&existingStudent).Error; err == nil {
-		var student structs.Student
-		db.Model(&student).Updates(map[string]interface{}{"attendance_rate": int(data["ar"].(float64)), "rank": int(data["rank"].(float64))})
 		response := map[string]interface{}{
-			"status": "edited",
+			"status": "done",
 		}
 		if err := json.NewEncoder(w).Encode(response); err != nil {
-			http.Error(w, "Error encoding JSON", http.StatusInternalServerError)
-			return
+			var student structs.Student
+			db.Model(&student).Updates(map[string]interface{}{"attendance_rate": int(data["ar"].(float64)), "rank": int(data["rank"].(float64))})
 		}
 	}
 	db.Create(&student)
